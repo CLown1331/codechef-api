@@ -30,9 +30,12 @@ async function getUserInfo (username) {
         const userPage = await response.text();
         const $ = cheerio.load(userPage);
         const rating = $('.rating-number').first().text() || null;
-        let lastParticipation = $('.time').first().text() || null;
+        const lastParticipation = $('.time').first().text() || null;
+        let lastParticipationTimeStamp = null;
+        let lastParticipationDate = null;
         if (lastParticipation) {
-            lastParticipation = new Date(lastParticipation.replace('(', '').replace(')', '')).getTime() / 1000;
+            lastParticipationDate = new Date(lastParticipation.replace('(', '').replace(')', ''))
+            lastParticipationTimeStamp = lastParticipationDate.getTime() / 1000;
         }
         console.log(rating, !!rating);
         console.log(lastParticipation, !!lastParticipation);
@@ -40,7 +43,8 @@ async function getUserInfo (username) {
         return {
             username,
             rating,
-            lastParticipation,
+            lastParticipationDate,
+            lastParticipationTimeStamp,
         }
     } catch (err) {
         console.error(err);
