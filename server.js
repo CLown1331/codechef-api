@@ -30,7 +30,10 @@ async function getUserInfo (username) {
         const userPage = await response.text();
         const $ = cheerio.load(userPage);
         const rating = $('.rating-number').first().text() || null;
-        const lastParticipation = $('.time').first().text() || null;
+        let lastParticipation = $('.time').first().text() || null;
+        if (lastParticipation) {
+            lastParticipation = new Date(lastParticipation.replace('(', '').replace(')', ''));
+        }
         console.log(rating, !!rating);
         console.log(lastParticipation, !!lastParticipation);
         console.log('---\n');
@@ -44,6 +47,9 @@ async function getUserInfo (username) {
         throw err;
     }
 }
-
+// (async function() {
+//     const result = await getUserInfo('CLown133123');
+//     console.log(result);
+// }());
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
