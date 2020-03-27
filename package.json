@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "mocha || exit 0"
   },
   "repository": {
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/CLown1331/codechef-api/issues"
   },
-  "homepage": "https://github.com/CLown1331/codechef-api#readme"
+  "homepage": "https://github.com/CLown1331/codechef-api#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "s": "^1.0.0"
+  }
 }
