@@ -32,7 +32,7 @@ async function getUserInfo (username) {
         const rating = $('.rating-number').first().text() || null;
         let lastParticipation = $('.time').first().text() || null;
         if (lastParticipation) {
-            lastParticipation = new Date(lastParticipation.replace('(', '').replace(')', ''));
+            lastParticipation = new Date(lastParticipation.replace('(', '').replace(')', '')).getTime() / 1000;
         }
         console.log(rating, !!rating);
         console.log(lastParticipation, !!lastParticipation);
