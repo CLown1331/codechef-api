@@ -20,6 +20,11 @@ app.get('/rating/:userName', async (req, res) => {
     }
     const result = await getUserInfo(userName);
     console.log(result);
+    if (result.rating == null) {
+        res.status(204);
+    } else {
+        res.status(200);
+    }
     res.send(result);
 });
 
