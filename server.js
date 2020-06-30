@@ -35,13 +35,21 @@ async function getUserInfo (username) {
         const userPage = await response.text();
         const $ = cheerio.load(userPage);
         const rating = $('.rating-number').first().text() || null;
-        const lastParticipation = $('.time').first().text() || null;
+        const times = $('.time');
+        const lastParticipation = times.first().text() || null;
         let lastParticipationTimeStamp = null;
         let lastParticipationDate = null;
-        if (lastParticipation) {
-            lastParticipationDate = new Date(lastParticipation.replace('(', '').replace(')', ''))
+        times.each(function(i, elem) {
+            let date = new Date($(this).text().replace('(', '').replace(')', ''));
+            if (date.getTime() !== date.getTime()) {
+                return;
+            }
+            console.log(date, lastParticipationDate);
+            if (lastParticipationDate === null || lastParticipationDate < date) {
+                lastParticipationDate = date;
+            }
             lastParticipationTimeStamp = lastParticipationDate.getTime() / 1000;
-        }
+        });
         console.log(rating, !!rating);
         console.log(lastParticipation, !!lastParticipation);
         console.log('---\n');
