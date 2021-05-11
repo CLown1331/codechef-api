@@ -1,8 +1,12 @@
 "use strict"
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require("express");
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const _ = require('lodash');
+const NodeCache = require( "node-cache" );
+const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
 const port = process.env.PORT || 8080
 
@@ -18,7 +22,9 @@ app.get('/rating/:userName', async (req, res) => {
     if (!userName) {
         res.send();
     }
-    const result = await getUserInfo(userName);
+    const cachedValue = cache.get(userName);
+    console.log('cachedValue: ', cachedValue);
+    const result = cachedValue === undefined ? await getUserInfo(userName) : cachedValue;
     console.log(result);
     if (result.rating == null) {
         res.status(204);
@@ -53,12 +59,14 @@ async function getUserInfo (username) {
         console.log(rating, !!rating);
         console.log(lastParticipation, !!lastParticipation);
         console.log('---\n');
-        return {
+        const result = {
             username,
             rating,
             lastParticipationDate,
             lastParticipationTimeStamp,
-        }
+        };
+        cache.set(username, result);
+        return result;
     } catch (err) {
         console.error(err);
         throw err;
