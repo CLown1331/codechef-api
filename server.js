@@ -6,7 +6,10 @@ const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const _ = require('lodash');
 const NodeCache = require( "node-cache" );
-const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+const cache = new NodeCache({ stdTTL: process.env.CACHE_TTL || 360, checkperiod: process.env.CACHE_CHECK || 600 });
+
+console.log('cache ttl:', process.env.CACHE_TTL || 360);
+console.log('cache check:', process.env.CACHE_CHECK || 600);
 
 const port = process.env.PORT || 8080
 
